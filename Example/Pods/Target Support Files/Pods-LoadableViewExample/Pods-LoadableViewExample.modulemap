@@ -1,0 +1,6 @@
+framework module Pods_LoadableViewExample {
+  umbrella header "Pods-LoadableViewExample-umbrella.h"
+
+  export *
+  module * { export * }
+}
