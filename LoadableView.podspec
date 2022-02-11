@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'LoadableView'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'LoadableViews reduces boilerplate when creating SwiftUI views that have loading/loaded/error states'
   s.swift_version    = '5.5'
   s.ios.deployment_target = '13.0'

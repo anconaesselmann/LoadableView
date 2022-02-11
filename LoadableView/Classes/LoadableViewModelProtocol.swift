@@ -37,3 +37,11 @@ public extension LoadableViewModelProtocol {
         fetch()
     }
 }
+
+public protocol ForegroundEnteringAware {
+    func willEnterForeground()
+}
+
+public protocol BackgroundEnteringAware {
+    func didEnterBackground()
+}

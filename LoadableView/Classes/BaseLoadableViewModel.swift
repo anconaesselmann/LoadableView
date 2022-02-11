@@ -11,6 +11,13 @@ open class BaseLoadableViewModel<Element>: ObservableObject {
     
     public init(startState state: ViewState<Element>) {
         self.state = state
+        
+        if self is ForegroundEnteringAware {
+            NotificationCenter.default.addObserver(self, selector: #selector(hasEnteredForeground(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
+        }
+        if self is BackgroundEnteringAware {
+            NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackgroundNotification(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        }
     }
     
     public func updateViewState(_ state: ViewState<Element>) {
@@ -31,6 +38,18 @@ open class BaseLoadableViewModel<Element>: ObservableObject {
             DispatchQueue.main.async { [weak self] in
                 self?.state = state
             }
+        }
+    }
+    
+    @objc func hasEnteredForeground(_ notification: Notification) {
+        if let foregroundEnteringAware = self as? ForegroundEnteringAware {
+            foregroundEnteringAware.willEnterForeground()
+        }
+    }
+    
+    @objc func didEnterBackgroundNotification(_ notification: Notification) {
+        if let backgroundEnteringAware = self as? BackgroundEnteringAware {
+            backgroundEnteringAware.didEnterBackground()
         }
     }
 }

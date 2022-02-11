@@ -7,10 +7,13 @@ public protocol InvalidatesTimerOnDeinit {
     func invalidateTimer()
 }
 
-public protocol ReloadingViewModel: AnyObject, LoadableViewModelProtocol, InvalidatesTimerOnDeinit {
+public protocol ReloadingViewModel: AnyObject, LoadableViewModelProtocol, InvalidatesTimerOnDeinit, ForegroundEnteringAware, BackgroundEnteringAware {
     var timer: Timer? { get set }
     
     var reloadTimerInterval: TimeInterval { get }
+    
+    func willEnterForeground()
+    func didEnterBackground()
 }
 
 public extension ReloadingViewModel {
@@ -31,6 +34,15 @@ public extension ReloadingViewModel {
     }
     
     func didDisappear() {
+        invalidateTimer()
+    }
+    
+    func willEnterForeground() {
+        updateViewState(.loading)
+        didAppear()
+    }
+    
+    func didEnterBackground() {
         invalidateTimer()
     }
 }
