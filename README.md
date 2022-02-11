@@ -1,6 +1,6 @@
 # LoadableView
 
-[![CI Status](https://img.shields.io/travis/Axel Ancona Esselmann/LoadableView.svg?style=flat)](https://travis-ci.org/anconaesselmann/LoadableView)
+[![CI Status](https://img.shields.io/travis/anconaesselmann/LoadableView.svg?style=flat)](https://travis-ci.org/anconaesselmann/LoadableView)
 [![Version](https://img.shields.io/cocoapods/v/LoadableView.svg?style=flat)](https://cocoapods.org/pods/LoadableView)
 [![License](https://img.shields.io/cocoapods/l/LoadableView.svg?style=flat)](https://cocoapods.org/pods/LoadableView)
 [![Platform](https://img.shields.io/cocoapods/p/LoadableView.svg?style=flat)](https://cocoapods.org/pods/LoadableView)
