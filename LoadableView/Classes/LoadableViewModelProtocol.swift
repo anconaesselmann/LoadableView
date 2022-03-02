@@ -12,7 +12,7 @@ public protocol LoadableViewModelProtocol {
     var statePublished: Published<ViewState<Element>> { get }
     var statePublisher: Published<ViewState<Element>>.Publisher { get }
 
-    func updateViewState(_ state: ViewState<Element>)
+    func updateViewState(_ state: ViewState<Element>, withAnimation isAnimated: Bool)
     
     func retry()
     func fetch()
@@ -33,7 +33,7 @@ public extension LoadableViewModelProtocol {
     }
     
     func retry() {
-        updateViewState(.loading)
+        updateViewState(.loading, withAnimation: false)
         fetch()
     }
 }

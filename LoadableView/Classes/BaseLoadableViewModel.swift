@@ -20,13 +20,19 @@ open class BaseLoadableViewModel<Element>: ObservableObject {
         }
     }
     
-    public func updateViewState(_ state: ViewState<Element>) {
+    public func updateViewState(_ state: ViewState<Element>, withAnimation isAnimated: Bool = false) {
         DispatchQueue.main.async { [weak self] in
-            self?.state = state
+            if isAnimated {
+                withAnimation {
+                    self?.state = state
+                }
+            } else {
+                self?.state = state
+            }
         }
     }
     
-    public func updateViewState(with asyncBlock: @escaping () async throws -> Element) {
+    public func updateViewState(withAnimation isAnimated: Bool = false, with asyncBlock: @escaping () async throws -> Element) {
         Task {
             let state: Loadable<Element, UserFacingError>
             do {
@@ -35,9 +41,7 @@ open class BaseLoadableViewModel<Element>: ObservableObject {
             } catch {
                 state = .error(error.asUserFacing)
             }
-            DispatchQueue.main.async { [weak self] in
-                self?.state = state
-            }
+            updateViewState(state, withAnimation: isAnimated)
         }
     }
     

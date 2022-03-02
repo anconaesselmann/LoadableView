@@ -38,7 +38,7 @@ public extension ReloadingViewModel {
     }
     
     func willEnterForeground() {
-        updateViewState(.loading)
+        updateViewState(.loading, withAnimation: false)
         didAppear()
     }
     
