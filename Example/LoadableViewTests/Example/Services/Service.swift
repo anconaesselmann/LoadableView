@@ -4,11 +4,6 @@
 import Foundation
 import LoremSwiftum
 
-struct ItemPreview: Identifiable {
-    let id: UUID
-    let text: String
-}
-
 @globalActor
 actor Service {
 
@@ -33,14 +28,14 @@ actor Service {
         }
     }
 
-    func fetchPreviews() async throws -> PreviewsResponse {
+    func fetchPreviews() async throws -> ItemsViewData {
         try await Task.sleep(nanoseconds: UInt64.random(in: 1000000000..<2000000000))
-        return PreviewsResponse(id: .itemPreviews, previews: listData)
+        return ItemsViewData(id: .itemPreviews, previews: listData)
     }
 
     func fetch(itemWithId id: Item.ID) async throws -> Item {
         try await Task.sleep(nanoseconds: UInt64.random(in: 1000000000..<2000000000))
-        guard Int.random(in: 0..<5) % 5 != 0 else {
+        guard Int.random(in: 0..<5) != 0 else {
             throw ServiceError.randomError
         }
         guard let item = items[id] else {

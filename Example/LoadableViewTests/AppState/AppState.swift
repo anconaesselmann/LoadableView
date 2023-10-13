@@ -6,6 +6,5 @@ import Foundation
 struct AppState {
     let service: Service
 
-    // The only force-unwrapped property is the singleton.
     static var shared: AppState!
 }
