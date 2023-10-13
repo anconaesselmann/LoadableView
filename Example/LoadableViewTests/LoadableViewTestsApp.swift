@@ -11,7 +11,8 @@ struct LoadableViewTestsApp: App {
     var appLoader = AppLoader()
 
     init() {
-        SwiftUIDebugManager.shared.isDebugging = true
+//        SwiftUIDebugManager.shared.isDebugging = true
+//        SwiftUIDebugManager.shared.showViewNames = true
     }
 
     var body: some Scene {
