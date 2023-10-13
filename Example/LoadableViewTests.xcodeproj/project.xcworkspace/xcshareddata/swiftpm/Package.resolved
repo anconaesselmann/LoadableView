@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "debugswiftui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/anconaesselmann/DebugSwiftUI",
+      "state" : {
+        "branch" : "main",
+        "revision" : "741fa577f2b2fd50adfa92c7b1ca146c2c863db2"
+      }
+    },
+    {
+      "identity" : "loremswiftum",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/lukaskubanek/LoremSwiftum.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "8942e732e50458cde5dccf9996afa16f29372853"
+      }
+    }
+  ],
+  "version" : 2
+}

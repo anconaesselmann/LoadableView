@@ -77,7 +77,9 @@ public extension LoadableView {
             }
         }.task {
             do {
-                vm.viewState = .loading
+                guard case .loading = vm.viewState else {
+                    return
+                }
                 let item = try await vm.load(id: id)
                 if let reloadsWhenForegrounding = vm as? (any ReloadsWhenForegrounding) {
                     reloadsWhenForegrounding.setLastLoaded()
