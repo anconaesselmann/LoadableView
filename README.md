@@ -1,24 +1,6 @@
 # LoadableView
 
-[![CI Status](https://img.shields.io/travis/Axel Ancona Esselmann/LoadableView.svg?style=flat)](https://travis-ci.org/Axel Ancona Esselmann/LoadableView)
-[![Version](https://img.shields.io/cocoapods/v/LoadableView.svg?style=flat)](https://cocoapods.org/pods/LoadableView)
-[![License](https://img.shields.io/cocoapods/l/LoadableView.svg?style=flat)](https://cocoapods.org/pods/LoadableView)
-[![Platform](https://img.shields.io/cocoapods/p/LoadableView.svg?style=flat)](https://cocoapods.org/pods/LoadableView)
-
-## Example
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-## Requirements
-
-## Installation
-
-LoadableView is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-```ruby
-pod 'LoadableView'
-```
+LoadableViews reduces boilerplate when creating SwiftUI views that have loading/loaded/error states.
 
 ## Author
 

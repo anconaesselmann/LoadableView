@@ -11,6 +11,8 @@ build/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
+/.build
+/Packages
 xcuserdata/
 *.xccheckout
 profile
@@ -35,3 +37,7 @@ Carthage/Build
 # `pod install` in .travis.yml
 #
 # Pods/
+DerivedData/
+.swiftpm/configuration/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc
