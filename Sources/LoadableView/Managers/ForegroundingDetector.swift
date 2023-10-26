@@ -4,7 +4,7 @@
 import SwiftUI
 
 @MainActor
-internal class ForegroundingDetector {
+final internal class ForegroundingDetector {
 
     static let shared = ForegroundingDetector()
 

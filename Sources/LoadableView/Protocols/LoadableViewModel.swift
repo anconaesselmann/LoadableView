@@ -2,48 +2,53 @@
 //
 
 import SwiftUI
+import Combine
 
 @MainActor
 public protocol LoadableViewModel: ObservableObject, AnyObject {
+
+    associatedtype OverlayState = CurrentValueSubject<Overlay, Never>
+
     associatedtype T
         where T: Identifiable
 
     var id: T.ID { get }
 
     var viewState: ViewState<T> { get set }
+    var overlayState: CurrentValueSubject<Overlay, Never> { get }
 
     init(_ id: T.ID)
 
     func load(id: T.ID) async throws -> T
 
-    func set(error: Error)
-
     func onAppear()
-
     func onDisappear()
+
+    func setError(_ error: Error?)
+    func setIsLoading(_ isLoading: Bool)
 }
 
 public extension LoadableViewModel {
+
     func refresh() async {
-        switch viewState {
-        case .loaded(let old), .errorWhenRefreshing(_, let old), .refreshing(let old):
-            viewState = .refreshing(old)
-        default:
-            viewState = .loading
-        }
+        setIsLoading(true)
         do {
             let item = try await load(id: id)
             if let reloadsWhenForegrounding = self as? (any ReloadsWhenForegrounding) {
                 reloadsWhenForegrounding.setLastLoaded()
             }
-            viewState = .loaded(item)
-        } catch {
             switch viewState {
-            case .refreshing(let old), .errorWhenRefreshing(_, let old):
-                viewState = .errorWhenRefreshing(error, old)
-            default:
-                viewState = .error(error)
+            case .notLoaded: 
+                viewState = .loaded(item)
+            case .loaded(let oldItem):
+                if !equal(oldItem, item) {
+                    viewState = .loaded(item)
+                }
             }
+            setIsLoading(false)
+        } catch {
+            setError(error)
+            return
         }
     }
 
@@ -51,10 +56,6 @@ public extension LoadableViewModel {
         Task { @MainActor in
             await refresh()
         }
-    }
-
-    func set(error: Error) {
-        viewState = .error(error)
     }
 
     func onAppear() { 
@@ -66,6 +67,23 @@ public extension LoadableViewModel {
     func onDisappear() { 
         if let foregroundEnteringAware = self as? (any ForegroundEnteringAware) {
             ForegroundingDetector.shared.stopObserving(foregroundEnteringAware)
+        }
+        setIsLoading(false)
+    }
+
+    func setError(_ error: Error?) {
+        if let error = error {
+            overlayState.send(.error(error))
+        } else {
+            overlayState.send(.none)
+        }
+    }
+
+    func setIsLoading(_ isLoading: Bool) {
+        if isLoading {
+            overlayState.send(.loading)
+        } else {
+            overlayState.send(.none)
         }
     }
 }

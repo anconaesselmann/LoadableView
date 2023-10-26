@@ -10,7 +10,9 @@ final class ItemViewModel: LoadableViewModel, ReloadsWhenForegrounding {
     var reloadTimerInterval: TimeInterval = 5
 
     @Published
-    var viewState: ViewState<Item> = .loading
+    var viewState: ViewState<Item> = .notLoaded
+
+    var overlayState: OverlayState = .none
 
     private let service: Service
 

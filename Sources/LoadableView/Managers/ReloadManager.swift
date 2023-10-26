@@ -4,7 +4,7 @@
 import Foundation
 
 @MainActor
-internal class ReloadManager {
+final internal class ReloadManager {
     static let shared = ReloadManager()
 
     var lastLoaded: [AnyHashable: Date] = [:]

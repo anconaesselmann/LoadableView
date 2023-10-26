@@ -3,17 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		976FEC5A2AD9E1F90053BAB1 /* ItemPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 976FEC592AD9E1F90053BAB1 /* ItemPreview.swift */; };
 		976FEC5E2AD9E3AD0053BAB1 /* ItemsViewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 976FEC5D2AD9E3AD0053BAB1 /* ItemsViewData.swift */; };
-		9791CFDB2AD9DEA900571826 /* LoadableView in Frameworks */ = {isa = PBXBuildFile; productRef = 9791CFDA2AD9DEA900571826 /* LoadableView */; };
 		9791CFDE2AD9DF4B00571826 /* ItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9791CFDD2AD9DF4B00571826 /* ItemViewModel.swift */; };
 		9791CFE12AD9DF7400571826 /* ItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9791CFE02AD9DF7400571826 /* ItemsView.swift */; };
 		9791CFE32AD9DF8F00571826 /* ItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9791CFE22AD9DF8E00571826 /* ItemsViewModel.swift */; };
 		9791CFE52AD9DFA600571826 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9791CFE42AD9DFA600571826 /* Route.swift */; };
+		97BB7C7B2AEA5C9000581935 /* LoadableView in Frameworks */ = {isa = PBXBuildFile; productRef = 97BB7C7A2AEA5C9000581935 /* LoadableView */; };
 		97BF0BE32AD719410050F720 /* LoadableViewTestsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97BF0BE22AD719410050F720 /* LoadableViewTestsApp.swift */; };
 		97BF0BE52AD719410050F720 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97BF0BE42AD719410050F720 /* ContentView.swift */; };
 		97BF0BE72AD719420050F720 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97BF0BE62AD719420050F720 /* Assets.xcassets */; };
@@ -54,7 +54,7 @@
 			files = (
 				97BF0C1A2AD9AFD80050F720 /* LoremSwiftum in Frameworks */,
 				97BF0C042AD9218B0050F720 /* DebugSwiftUI in Frameworks */,
-				9791CFDB2AD9DEA900571826 /* LoadableView in Frameworks */,
+				97BB7C7B2AEA5C9000581935 /* LoadableView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,8 +91,8 @@
 		9791CFDF2AD9DF6C00571826 /* ItemsView */ = {
 			isa = PBXGroup;
 			children = (
-				9791CFE02AD9DF7400571826 /* ItemsView.swift */,
 				976FEC5D2AD9E3AD0053BAB1 /* ItemsViewData.swift */,
+				9791CFE02AD9DF7400571826 /* ItemsView.swift */,
 				9791CFE22AD9DF8E00571826 /* ItemsViewModel.swift */,
 			);
 			path = ItemsView;
@@ -175,7 +175,7 @@
 			packageProductDependencies = (
 				97BF0C032AD9218B0050F720 /* DebugSwiftUI */,
 				97BF0C192AD9AFD80050F720 /* LoremSwiftum */,
-				9791CFDA2AD9DEA900571826 /* LoadableView */,
+				97BB7C7A2AEA5C9000581935 /* LoadableView */,
 			);
 			productName = LoadableViewTests;
 			productReference = 97BF0BDF2AD719410050F720 /* LoadableViewTests.app */;
@@ -208,7 +208,7 @@
 			packageReferences = (
 				97BF0C022AD9218B0050F720 /* XCRemoteSwiftPackageReference "DebugSwiftUI" */,
 				97BF0C182AD9AFD80050F720 /* XCRemoteSwiftPackageReference "LoremSwiftum" */,
-				9791CFD92AD9DEA900571826 /* XCRemoteSwiftPackageReference "LoadableView" */,
+				97BB7C792AEA5C9000581935 /* XCLocalSwiftPackageReference ".." */,
 			);
 			productRefGroup = 97BF0BE02AD719410050F720 /* Products */;
 			projectDirPath = "";
@@ -468,15 +468,14 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		9791CFD92AD9DEA900571826 /* XCRemoteSwiftPackageReference "LoadableView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/anconaesselmann/LoadableView";
-			requirement = {
-				kind = revision;
-				revision = 674fde5aadaf672af67d8ece93ff18253b68966c;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		97BB7C792AEA5C9000581935 /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ..;
 		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
 		97BF0C022AD9218B0050F720 /* XCRemoteSwiftPackageReference "DebugSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/anconaesselmann/DebugSwiftUI";
@@ -496,9 +495,8 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		9791CFDA2AD9DEA900571826 /* LoadableView */ = {
+		97BB7C7A2AEA5C9000581935 /* LoadableView */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 9791CFD92AD9DEA900571826 /* XCRemoteSwiftPackageReference "LoadableView" */;
 			productName = LoadableView;
 		};
 		97BF0C032AD9218B0050F720 /* DebugSwiftUI */ = {

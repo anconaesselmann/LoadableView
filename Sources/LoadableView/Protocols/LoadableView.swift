@@ -7,16 +7,14 @@ import SwiftUI
 public protocol LoadableView: View {
     associatedtype T
         where T: Identifiable
+    associatedtype NotLoadedView
+        where NotLoadedView: View
     associatedtype Loaded
         where Loaded: View
     associatedtype Loading
         where Loading: View
     associatedtype ErrorView
         where ErrorView: View
-    associatedtype ErrorWhenRefreshingView
-        where ErrorWhenRefreshingView: View
-    associatedtype RefreshingView
-        where RefreshingView: View
     associatedtype VM
         where VM: LoadableViewModel, VM.T == T
 
@@ -38,10 +36,7 @@ public protocol LoadableView: View {
     func errorView(_ error: Error) -> ErrorView
 
     @ViewBuilder
-    func errorWhenRefreshingView(_ old: T, error: Error) -> ErrorWhenRefreshingView
-
-    @ViewBuilder
-    func refreshing(_ old: T) -> RefreshingView
+    func notLoaded() -> NotLoadedView
 
     func onAppear()
 
@@ -62,32 +57,35 @@ public extension LoadableView {
 
     @ViewBuilder
     var body: some View {
-        Group {
+        ZStack {
             switch vm.viewState {
-            case .loading:
-                loading()
+            case .notLoaded:
+                notLoaded()
             case .loaded(let item):
                 loaded(item: item)
-            case .refreshing(let old):
-                refreshing(old)
-            case .error(let error):
-                errorView(error)
-            case .errorWhenRefreshing(let error, let old):
-                errorWhenRefreshingView(old, error: error)
+            }
+            InternalLoadingView(vm.overlayState) {
+                loading()
+            }
+            InternalErrorView(vm.overlayState) {
+                errorView($0)
             }
         }.task {
             do {
-                guard case .loading = vm.viewState else {
+                guard case .notLoaded = vm.viewState else {
                     return
                 }
+                vm.setIsLoading(true)
                 let item = try await vm.load(id: id)
                 if let reloadsWhenForegrounding = vm as? (any ReloadsWhenForegrounding) {
                     reloadsWhenForegrounding.setLastLoaded()
                 }
                 vm.viewState = .loaded(item)
             } catch {
-                vm.viewState = .error(error)
+                vm.setError(error)
+                return
             }
+            vm.setIsLoading(false)
         }
         .onAppear {
             vm.onAppear()
@@ -105,48 +103,4 @@ public extension LoadableView {
     func onAppear() { }
 
     func onDisappear() { }
-}
-
-@MainActor
-public protocol DefaultLoadableView: LoadableView { }
-
-public extension DefaultLoadableView {
-
-    @ViewBuilder
-    func loading() -> some View {
-        ProgressView()
-    }
-
-    @ViewBuilder
-    func errorView(_ error: Error) -> some View {
-        VStack {
-            Text(error.localizedDescription)
-            Button("retry") {
-                vm.refresh()
-            }
-        }.padding()
-    }
-
-    @ViewBuilder
-    func refreshing(_ old: T) -> some View {
-        ZStack {
-            loaded(item: old)
-            Color.gray.opacity(0.2).ignoresSafeArea()
-            ProgressView()
-        }
-    }
-
-    @ViewBuilder
-    func errorWhenRefreshingView(_ old: T, error: Error) -> some View {
-        ZStack {
-            loaded(item: old)
-                .alert(
-                    error.localizedDescription,
-                    isPresented: Binding(get: { true }, set: { _ in }),
-                    actions: {
-                        Button("ok") {}
-                    }
-                )
-        }
-    }
 }

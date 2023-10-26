@@ -10,14 +10,6 @@
       }
     },
     {
-      "identity" : "loadableview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/anconaesselmann/LoadableView",
-      "state" : {
-        "revision" : "674fde5aadaf672af67d8ece93ff18253b68966c"
-      }
-    },
-    {
       "identity" : "loremswiftum",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/lukaskubanek/LoremSwiftum.git",

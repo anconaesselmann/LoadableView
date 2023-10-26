@@ -3,7 +3,7 @@
 
 import Foundation
 
-struct Item: Identifiable {
+struct Item: Identifiable, Equatable {
     let id: UUID
     let text: String
 }

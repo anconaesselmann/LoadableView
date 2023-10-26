@@ -4,9 +4,12 @@
 import Foundation
 
 public enum ViewState<T> {
-    case loading
-    case refreshing(T)
+    case notLoaded
     case loaded(T)
+}
+
+public enum Overlay {
+    case none
+    case loading
     case error(Error)
-    case errorWhenRefreshing(Error, T)
 }
