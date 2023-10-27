@@ -28,7 +28,7 @@ public protocol LoadableView: View {
 
     // MARK: - View states
     @ViewBuilder
-    func loaded(item: Element) -> LoadedView
+    func loaded(_ element: Element) -> LoadedView
 
     @ViewBuilder
     func loading() -> LoadingView
@@ -62,7 +62,7 @@ public extension LoadableView {
             case .notLoaded:
                 notLoaded()
             case .loaded(let item):
-                loaded(item: item)
+                loaded(item)
             }
             InternalLoadingView(vm.overlayState) {
                 loading()

@@ -17,7 +17,7 @@ struct ItemsView: DefaultLoadableView {
 
     var _vm: StateObject<ItemsViewModel>
 
-    func loaded(item: ItemsViewData) -> some View {
+    func loaded(_ item: ItemsViewData) -> some View {
         VStack {
             DebugView(self)
             List {

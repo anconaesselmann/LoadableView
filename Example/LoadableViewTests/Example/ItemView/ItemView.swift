@@ -17,7 +17,7 @@ struct ItemView: DefaultLoadableView, Identifiable {
         SwiftUIDebugManager.shared.increment(initCountFor: self)
     }
 
-    func loaded(item: Item) -> some View {
+    func loaded(_ item: Item) -> some View {
         VStack {
             HStack {
                 VStack {
