@@ -20,7 +20,10 @@ struct ItemView: DefaultLoadableView, Identifiable {
     func loaded(item: Item) -> some View {
         VStack {
             HStack {
-                Text(item.text)
+                VStack {
+                    Text(item.short)
+                    Text(item.text)
+                }
                 DebugView(self)
             }
             Button("refresh") {

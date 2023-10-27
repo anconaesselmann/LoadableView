@@ -5,7 +5,7 @@ import SwiftUI
 import LoadableView
 
 final class ItemViewModel: LoadableViewModel, ReloadsWhenForegrounding {
-    let id: Item.ID
+    var id: Item.ID
 
     var reloadTimerInterval: TimeInterval = 5
 
@@ -27,6 +27,10 @@ final class ItemViewModel: LoadableViewModel, ReloadsWhenForegrounding {
 
     func load(id: Item.ID) async throws -> Item {
         try await service.fetch(itemWithId: id)
+    }
+
+    func cancel(id: T.ID) async {
+        await service.cancel(itemWithId: id)
     }
 
     func willEnterForeground() {
