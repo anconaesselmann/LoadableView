@@ -12,7 +12,8 @@ public protocol LoadableViewModel: ObservableObject, AnyObject {
     associatedtype T
         where T: Identifiable
 
-    var id: T.ID { get }
+    // MARK: - Required implementation
+    var id: T.ID { get set }
 
     var viewState: ViewState<T> { get set }
     var overlayState: CurrentValueSubject<Overlay, Never> { get }
@@ -20,6 +21,9 @@ public protocol LoadableViewModel: ObservableObject, AnyObject {
     init(_ id: T.ID)
 
     func load(id: T.ID) async throws -> T
+
+    // MARK: - Optional implementation
+    func cancel(id: T.ID) async
 
     func onAppear()
     func onDisappear()
@@ -30,15 +34,31 @@ public protocol LoadableViewModel: ObservableObject, AnyObject {
 
 public extension LoadableViewModel {
 
+    func idHasChanged(oldId: T.ID, newId: T.ID, showNotLoadedState: Bool = true) {
+        setIsLoading(false)
+        setError(nil)
+        Task {
+            await cancel(id: oldId)
+            await MainActor.run {
+                if showNotLoadedState {
+                    viewState = .notLoaded
+                }
+                id = newId
+                refresh()
+            }
+        }
+    }
+
     func refresh() async {
         setIsLoading(true)
         do {
+            let id = self.id
             let item = try await load(id: id)
             if let reloadsWhenForegrounding = self as? (any ReloadsWhenForegrounding) {
                 reloadsWhenForegrounding.setLastLoaded()
             }
             switch viewState {
-            case .notLoaded: 
+            case .notLoaded:
                 viewState = .loaded(item)
             case .loaded(let oldItem):
                 if !equal(oldItem, item) {
@@ -46,10 +66,16 @@ public extension LoadableViewModel {
                 }
             }
             setIsLoading(false)
-        } catch {
+        } 
+        catch is CancellationError {} // { print("cancelled") }
+        catch {
             setError(error)
             return
         }
+    }
+
+    func cancel(id: T.ID) async {
+        // Implement to cancel loading
     }
 
     func refresh() {

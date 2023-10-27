@@ -4,7 +4,11 @@
 import Foundation
 
 struct AppState {
+    struct Debug {
+        var simulateFailures: Bool = false
+    }
     let service: Service
+    var debug = Debug()
 
     static var shared: AppState!
 }

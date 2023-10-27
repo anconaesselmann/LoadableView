@@ -6,7 +6,7 @@ import LoadableView
 
 @MainActor
 final class ItemsViewModel: LoadableViewModel, ReloadsWhenForegrounding {
-    let id: ItemsViewData.ID
+    var id: ItemsViewData.ID
 
     var reloadTimerInterval: TimeInterval = 5
 

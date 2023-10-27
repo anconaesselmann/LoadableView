@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "LoadableView",
     platforms: [
-        .macOS(.v12),
+        .macOS(.v14),
         .iOS(.v15)
     ],
     products: [

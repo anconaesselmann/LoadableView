@@ -76,12 +76,15 @@ public extension LoadableView {
                     return
                 }
                 vm.setIsLoading(true)
+                let id = self.id
                 let item = try await vm.load(id: id)
                 if let reloadsWhenForegrounding = vm as? (any ReloadsWhenForegrounding) {
                     reloadsWhenForegrounding.setLastLoaded()
                 }
                 vm.viewState = .loaded(item)
-            } catch {
+            } 
+            catch is CancellationError {} // { print("cancelled") }
+            catch {
                 vm.setError(error)
                 return
             }
@@ -94,9 +97,15 @@ public extension LoadableView {
         .onDisappear {
             vm.onDisappear()
             onDisappear()
+            Task {
+                await vm.cancel(id: id)
+            }
         }
         .refreshable {
             vm.refresh()
+        }
+        .onChange(of: id) { oldValue, newValue in
+            vm.idHasChanged(oldId: oldValue, newId: newValue)
         }
     }
 
