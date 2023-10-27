@@ -5,32 +5,33 @@ import SwiftUI
 
 @MainActor
 public protocol LoadableView: View {
-    associatedtype T
-        where T: Identifiable
+    associatedtype Element
+        where Element: Identifiable
     associatedtype NotLoadedView
         where NotLoadedView: View
-    associatedtype Loaded
-        where Loaded: View
-    associatedtype Loading
-        where Loading: View
+    associatedtype LoadedView
+        where LoadedView: View
+    associatedtype LoadingView
+        where LoadingView: View
     associatedtype ErrorView
         where ErrorView: View
-    associatedtype VM
-        where VM: LoadableViewModel, VM.T == T
+    associatedtype ViewModel
+        where ViewModel: LoadableViewModel, ViewModel.Element == Element
 
-    var _vm: StateObject<VM> { get set }
+    var id: Element.ID { get set }
 
-    var vm: VM { get }
+    var _vm: StateObject<ViewModel> { get set }
+    var vm: ViewModel { get }
 
-    var id: T.ID { get set }
+    // MARK: - Initializers
+    init(id: Element.ID, _vm: StateObject<ViewModel>)
 
-    init(id: T.ID, _vm: StateObject<VM>)
+    // MARK: - View states
+    @ViewBuilder
+    func loaded(item: Element) -> LoadedView
 
     @ViewBuilder
-    func loaded(item: T) -> Loaded
-
-    @ViewBuilder
-    func loading() -> Loading
+    func loading() -> LoadingView
 
     @ViewBuilder
     func errorView(_ error: Error) -> ErrorView
@@ -38,22 +39,21 @@ public protocol LoadableView: View {
     @ViewBuilder
     func notLoaded() -> NotLoadedView
 
+    // MARK: Optional
     func onAppear()
-
     func onDisappear()
 }
 
 public extension LoadableView {
-    init(id: T.ID) {
-        let vm = VM(id)
-        self.init(id: id, _vm: StateObject(wrappedValue: vm))
-    }
 
-    var vm: VM {
+    var vm: ViewModel {
         _vm.wrappedValue
     }
 
-    var viewStateAnimation: Animation? { .default }
+    init(id: Element.ID) {
+        let vm = ViewModel(id)
+        self.init(id: id, _vm: StateObject(wrappedValue: vm))
+    }
 
     @ViewBuilder
     var body: some View {

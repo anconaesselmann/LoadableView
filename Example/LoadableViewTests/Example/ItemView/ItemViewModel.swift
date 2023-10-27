@@ -29,7 +29,7 @@ final class ItemViewModel: LoadableViewModel, ReloadsWhenForegrounding {
         try await service.fetch(itemWithId: id)
     }
 
-    func cancel(id: T.ID) async {
+    func cancel(id: Item.ID) async {
         await service.cancel(itemWithId: id)
     }
 

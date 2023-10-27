@@ -9,21 +9,21 @@ public protocol LoadableViewModel: ObservableObject, AnyObject {
 
     associatedtype OverlayState = CurrentValueSubject<Overlay, Never>
 
-    associatedtype T
-        where T: Identifiable
+    associatedtype Element
+        where Element: Identifiable
 
     // MARK: - Required implementation
-    var id: T.ID { get set }
+    var id: Element.ID { get set }
 
-    var viewState: ViewState<T> { get set }
+    var viewState: ViewState<Element> { get set }
     var overlayState: CurrentValueSubject<Overlay, Never> { get }
 
-    init(_ id: T.ID)
+    init(_ id: Element.ID)
 
-    func load(id: T.ID) async throws -> T
+    func load(id: Element.ID) async throws -> Element
 
     // MARK: - Optional implementation
-    func cancel(id: T.ID) async
+    func cancel(id: Element.ID) async
 
     func onAppear()
     func onDisappear()
@@ -34,7 +34,11 @@ public protocol LoadableViewModel: ObservableObject, AnyObject {
 
 public extension LoadableViewModel {
 
-    func idHasChanged(oldId: T.ID, newId: T.ID, showNotLoadedState: Bool = true) {
+    func idHasChanged(
+        oldId: Element.ID,
+        newId: Element.ID,
+        showNotLoadedState: Bool = true
+    ) {
         setIsLoading(false)
         setError(nil)
         Task {
@@ -74,7 +78,7 @@ public extension LoadableViewModel {
         }
     }
 
-    func cancel(id: T.ID) async {
+    func cancel(id: Element.ID) async {
         // Implement to cancel loading
     }
 
