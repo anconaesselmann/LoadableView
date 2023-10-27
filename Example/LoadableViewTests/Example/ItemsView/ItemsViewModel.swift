@@ -26,7 +26,7 @@ final class ItemsViewModel: LoadableViewModel, ReloadsWhenForegrounding {
         self.service = service
     }
 
-    func load(id: ItemsViewData.ID) async throws -> ItemsViewData {
+    func load() async throws -> ItemsViewData {
         try await service.fetchPreviews()
     }
 }

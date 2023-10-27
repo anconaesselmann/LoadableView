@@ -20,10 +20,10 @@ public protocol LoadableViewModel: ObservableObject, AnyObject {
 
     init(_ id: Element.ID)
 
-    func load(id: Element.ID) async throws -> Element
+    func load() async throws -> Element
 
     // MARK: - Optional implementation
-    func cancel(id: Element.ID) async
+    func cancel() async
 
     func onAppear()
     func onDisappear()
@@ -35,14 +35,13 @@ public protocol LoadableViewModel: ObservableObject, AnyObject {
 public extension LoadableViewModel {
 
     func idHasChanged(
-        oldId: Element.ID,
-        newId: Element.ID,
+        _ newId: Element.ID,
         showNotLoadedState: Bool = true
     ) {
         setIsLoading(false)
         setError(nil)
         Task {
-            await cancel(id: oldId)
+            await cancel()
             await MainActor.run {
                 if showNotLoadedState {
                     viewState = .notLoaded
@@ -53,11 +52,30 @@ public extension LoadableViewModel {
         }
     }
 
+    func initialLoad() async {
+        do {
+            guard case .notLoaded = viewState else {
+                return
+            }
+            setIsLoading(true)
+            let item = try await load()
+            if let reloadsWhenForegrounding = self as? (any ReloadsWhenForegrounding) {
+                reloadsWhenForegrounding.setLastLoaded()
+            }
+            viewState = .loaded(item)
+        }
+        catch is CancellationError {} // { print("cancelled") }
+        catch {
+            setError(error)
+            return
+        }
+        setIsLoading(false)
+    }
+
     func refresh() async {
         setIsLoading(true)
         do {
-            let id = self.id
-            let item = try await load(id: id)
+            let item = try await load()
             if let reloadsWhenForegrounding = self as? (any ReloadsWhenForegrounding) {
                 reloadsWhenForegrounding.setLastLoaded()
             }
@@ -78,7 +96,7 @@ public extension LoadableViewModel {
         }
     }
 
-    func cancel(id: Element.ID) async {
+    func cancel() async {
         // Implement to cancel loading
     }
 
