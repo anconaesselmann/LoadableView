@@ -6,20 +6,25 @@ import SwiftUI
 @MainActor
 public protocol IDedLoadableView: LoadableBaseView
     where
-        Element: Identifiable,
         ViewModel: IDedLoadableViewModel,
-        ViewModel.Element == Element
+        ViewModel.Element == Element,
+        ViewModel.ID == ID
 {
+    associatedtype ID
+        where
+            ID: Hashable,
+            ID: Equatable
+
     // MARK: - Required implementation
-    var id: Element.ID { get set }
+    var id: ID { get set }
 
     // MARK: - Initializers
-    init(id: Element.ID, _vm: StateObject<ViewModel>)
+    init(id: ID, _vm: StateObject<ViewModel>)
 }
 
 public extension IDedLoadableView {
-    init(id: Element.ID) {
-        let vm = ViewModel(id)
+    init(id: ID) {
+        let vm = ViewModel(id: id)
         self.init(id: id, _vm: StateObject(wrappedValue: vm))
     }
 
