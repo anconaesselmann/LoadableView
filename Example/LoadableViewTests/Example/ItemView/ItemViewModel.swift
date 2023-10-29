@@ -15,7 +15,7 @@ final class ItemViewModel: IDedLoadableViewModel {
 
     private let service: Service
 
-    convenience init(_ id: Item.ID) {
+    convenience init(id: Item.ID) {
         self.init(id: id, service: AppState.shared.service)
     }
 

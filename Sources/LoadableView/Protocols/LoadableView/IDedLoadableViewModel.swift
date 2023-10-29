@@ -8,16 +8,21 @@ import Combine
 public protocol IDedLoadableViewModel: LoadableBaseViewModel
     where Element: Identifiable
 {
+    associatedtype ID
+        where
+            ID: Hashable,
+            ID: Equatable
+
     // MARK: - Required implementation
-    var id: Element.ID { get set }
+    var id: ID { get set }
 
     // MARK: - Initializers
-    init(_ id: Element.ID)
+    init(id: ID)
 }
 
 public extension IDedLoadableViewModel {
     func idHasChanged(
-        _ newId: Element.ID,
+        _ newId: ID,
         showNotLoadedState: Bool = true
     ) {
         setIsLoading(false)
