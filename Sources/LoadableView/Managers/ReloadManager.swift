@@ -5,15 +5,15 @@ import Foundation
 
 @MainActor
 final internal class ReloadManager {
-    static let shared = ReloadManager()
+    internal static let shared = ReloadManager()
 
-    var lastLoaded: [AnyHashable: Date] = [:]
+    private var lastLoaded: [AnyHashable: Date] = [:]
 
-    func setLastLoaded(for item: any ReloadsWhenForegrounding) {
+    internal func setLastLoaded(for item: any ReloadsWhenForegrounding) {
         lastLoaded[AnyHashable(item.id)] = Date()
     }
 
-    func durationSinceLastReload(for item: any ReloadsWhenForegrounding) -> TimeInterval {
+    internal func durationSinceLastReload(for item: any ReloadsWhenForegrounding) -> TimeInterval {
         let lastLoaded = lastLoaded[AnyHashable(item.id)] ?? .now
         return abs(Date.now.timeIntervalSince(lastLoaded))
     }

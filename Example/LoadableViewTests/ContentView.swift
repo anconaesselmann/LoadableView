@@ -19,12 +19,12 @@ struct ContentView: View {
             if useNavStack {
                 VStack {
                     NavigationStack(path: $path) {
-                        ItemsView(id: .itemPreviews)
+                        ItemsView()
                     }
                 }
             } else {
                 NavigationSplitView {
-                    ItemsView(id: .itemPreviews)
+                    ItemsView()
                 } detail: {
                     if let detailId = path.first {
                         ItemView(id: detailId)

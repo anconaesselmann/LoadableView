@@ -1,56 +1,31 @@
-//  Created by Axel Ancona Esselmann on 10/12/23.
+//  Created by Axel Ancona Esselmann on 10/29/23.
 //
 
 import SwiftUI
 import Combine
 
 @MainActor
-public protocol LoadableViewModel: ObservableObject, AnyObject {
-
+public protocol LoadableBaseViewModel: ObservableObject, AnyObject {
     associatedtype OverlayState = CurrentValueSubject<Overlay, Never>
-
     associatedtype Element
-        where Element: Identifiable
 
     // MARK: - Required implementation
-    var id: Element.ID { get set }
-
     var viewState: ViewState<Element> { get set }
     var overlayState: CurrentValueSubject<Overlay, Never> { get }
-
-    init(_ id: Element.ID)
 
     func load() async throws -> Element
 
     // MARK: - Optional implementation
     func cancel() async
 
+    // MARK: - Don't implement
     func onAppear()
     func onDisappear()
-
     func setError(_ error: Error?)
     func setIsLoading(_ isLoading: Bool)
 }
 
-public extension LoadableViewModel {
-
-    func idHasChanged(
-        _ newId: Element.ID,
-        showNotLoadedState: Bool = true
-    ) {
-        setIsLoading(false)
-        setError(nil)
-        Task {
-            await cancel()
-            await MainActor.run {
-                if showNotLoadedState {
-                    viewState = .notLoaded
-                }
-                id = newId
-                refresh()
-            }
-        }
-    }
+public extension LoadableBaseViewModel {
 
     func initialLoad() async {
         do {
@@ -64,7 +39,7 @@ public extension LoadableViewModel {
             }
             viewState = .loaded(item)
         }
-        catch is CancellationError {} // { print("cancelled") }
+        catch is CancellationError {}
         catch {
             setError(error)
             return
@@ -88,8 +63,8 @@ public extension LoadableViewModel {
                 }
             }
             setIsLoading(false)
-        } 
-        catch is CancellationError {} // { print("cancelled") }
+        }
+        catch is CancellationError {}
         catch {
             setError(error)
             return
@@ -106,17 +81,20 @@ public extension LoadableViewModel {
         }
     }
 
-    func onAppear() { 
+    func onAppear() {
         if let foregroundEnteringAware = self as? (any ForegroundEnteringAware) {
             ForegroundingDetector.shared.observe(foregroundEnteringAware)
         }
     }
 
-    func onDisappear() { 
+    func onDisappear() {
         if let foregroundEnteringAware = self as? (any ForegroundEnteringAware) {
             ForegroundingDetector.shared.stopObserving(foregroundEnteringAware)
         }
         setIsLoading(false)
+        Task {
+            await cancel()
+        }
     }
 
     func setError(_ error: Error?) {

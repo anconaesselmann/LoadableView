@@ -33,9 +33,9 @@ actor Service {
         }
     }
 
-    func fetchPreviews() async throws -> ItemsViewData {
+    func fetchPreviews() async throws -> [ItemPreview] {
         try await Task.sleep(nanoseconds: UInt64.random(in: 1000000000..<2000000000))
-        return ItemsViewData(id: .itemPreviews, previews: listData)
+        return listData
     }
 
     func fetch(itemWithId id: Item.ID) async throws -> Item {

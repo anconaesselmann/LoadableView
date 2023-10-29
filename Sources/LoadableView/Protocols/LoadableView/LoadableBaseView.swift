@@ -1,12 +1,11 @@
-//  Created by Axel Ancona Esselmann on 10/12/23.
+//  Created by Axel Ancona Esselmann on 10/29/23.
 //
 
 import SwiftUI
 
 @MainActor
-public protocol LoadableView: View {
+public protocol LoadableBaseView: View {
     associatedtype Element
-        where Element: Identifiable
     associatedtype NotLoadedView
         where NotLoadedView: View
     associatedtype LoadedView
@@ -16,15 +15,11 @@ public protocol LoadableView: View {
     associatedtype ErrorView
         where ErrorView: View
     associatedtype ViewModel
-        where ViewModel: LoadableViewModel, ViewModel.Element == Element
+        where ViewModel: LoadableBaseViewModel, ViewModel.Element == Element
 
-    var id: Element.ID { get set }
-
+    // MARK: - Required
     var _vm: StateObject<ViewModel> { get set }
     var vm: ViewModel { get }
-
-    // MARK: - Initializers
-    init(id: Element.ID, _vm: StateObject<ViewModel>)
 
     // MARK: - View states
     @ViewBuilder
@@ -44,15 +39,10 @@ public protocol LoadableView: View {
     func onDisappear()
 }
 
-public extension LoadableView {
+public extension LoadableBaseView {
 
     var vm: ViewModel {
         _vm.wrappedValue
-    }
-
-    init(id: Element.ID) {
-        let vm = ViewModel(id)
-        self.init(id: id, _vm: StateObject(wrappedValue: vm))
     }
 
     @ViewBuilder
@@ -61,8 +51,8 @@ public extension LoadableView {
             switch vm.viewState {
             case .notLoaded:
                 notLoaded()
-            case .loaded(let item):
-                loaded(item)
+            case .loaded(let element):
+                loaded(element)
             }
             InternalLoadingView(vm.overlayState) {
                 loading()
@@ -80,15 +70,10 @@ public extension LoadableView {
         .onDisappear {
             vm.onDisappear()
             onDisappear()
-            Task {
-                await vm.cancel()
-            }
+
         }
         .refreshable {
             vm.refresh()
-        }
-        .onChange(of: id) { _, newValue in
-            vm.idHasChanged(newValue)
         }
     }
 

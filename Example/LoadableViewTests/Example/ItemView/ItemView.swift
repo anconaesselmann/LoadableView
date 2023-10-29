@@ -5,17 +5,10 @@ import SwiftUI
 import DebugSwiftUI
 import LoadableView
 
-struct ItemView: DefaultLoadableView, Identifiable {
+struct ItemView: IDedDefaultLoadableView {
 
     var id: Item.ID
-
     var _vm: StateObject<ItemViewModel>
-
-    init(id: Item.ID, _vm: StateObject<ItemViewModel>) {
-        self.id = id
-        self._vm = _vm
-        SwiftUIDebugManager.shared.increment(initCountFor: self)
-    }
 
     func loaded(_ item: Item) -> some View {
         VStack {

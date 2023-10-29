@@ -6,19 +6,19 @@ import SwiftUI
 @MainActor
 final internal class ForegroundingDetector {
 
-    static let shared = ForegroundingDetector()
+    internal static let shared = ForegroundingDetector()
 
-    var observers: [AnyHashable: any ForegroundEnteringAware] = [:]
+    private var observers: [AnyHashable: any ForegroundEnteringAware] = [:]
 
-    func observe(_ observer: any ForegroundEnteringAware) {
+    internal func observe(_ observer: any ForegroundEnteringAware) {
         observers[AnyHashable(observer.id)] = observer
     }
 
-    func stopObserving(_ observer: any ForegroundEnteringAware) {
+    internal func stopObserving(_ observer: any ForegroundEnteringAware) {
         observers[AnyHashable(observer.id)] = nil
     }
 
-    init() {
+    internal init() {
         #if os(macOS)
         NotificationCenter.default.addObserver(
             self,
@@ -38,7 +38,8 @@ final internal class ForegroundingDetector {
         #endif
     }
 
-    @objc func hasEnteredForeground(_ notification: Notification) {
+    @objc 
+    internal func hasEnteredForeground(_ notification: Notification) {
         for (_, observer) in observers {
             observer.willEnterForeground()
             if let reloading = observer as? (any ReloadsWhenForegrounding) {
@@ -47,7 +48,8 @@ final internal class ForegroundingDetector {
         }
     }
 
-    @objc func didEnterBackgroundNotification(_ notification: Notification) {
+    @objc
+    internal func didEnterBackgroundNotification(_ notification: Notification) {
         for (_, observer) in observers {
             observer.didEnterBackground()
         }

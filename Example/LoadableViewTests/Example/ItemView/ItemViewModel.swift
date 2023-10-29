@@ -4,10 +4,9 @@
 import SwiftUI
 import LoadableView
 
-final class ItemViewModel: LoadableViewModel, ReloadsWhenForegrounding {
-    var id: Item.ID
+final class ItemViewModel: IDedLoadableViewModel {
 
-    var reloadTimerInterval: TimeInterval = 5
+    var id: Item.ID
 
     @Published
     var viewState: ViewState<Item> = .notLoaded
@@ -17,10 +16,10 @@ final class ItemViewModel: LoadableViewModel, ReloadsWhenForegrounding {
     private let service: Service
 
     convenience init(_ id: Item.ID) {
-        self.init(id: id)
+        self.init(id: id, service: AppState.shared.service)
     }
 
-    init(id: Item.ID, service: Service = AppState.shared.service) {
+    init(id: Item.ID, service: Service) {
         self.id = id
         self.service = service
     }
@@ -40,4 +39,9 @@ final class ItemViewModel: LoadableViewModel, ReloadsWhenForegrounding {
     func didEnterBackground() {
         print("backgrounding", id.uuidString)
     }
+}
+
+extension ItemViewModel: ReloadsWhenForegrounding {
+
+    var reloadTimerInterval: TimeInterval { 5 }
 }

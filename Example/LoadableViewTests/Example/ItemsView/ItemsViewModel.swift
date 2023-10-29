@@ -5,28 +5,30 @@ import SwiftUI
 import LoadableView
 
 @MainActor
-final class ItemsViewModel: LoadableViewModel, ReloadsWhenForegrounding {
-    var id: ItemsViewData.ID
-
-    var reloadTimerInterval: TimeInterval = 5
+final class ItemsViewModel: LoadableViewModel {
 
     @Published
-    var viewState: ViewState<ItemsViewData> = .notLoaded
+    var viewState: ViewState<[ItemPreview]> = .notLoaded
 
     var overlayState: OverlayState = .none
 
     private let service: Service
 
-    convenience init(_ id: ItemsViewData.ID) {
-        self.init(id: id)
+    convenience init() {
+        self.init(service: AppState.shared.service)
     }
 
-    init(id: ItemsViewData.ID, service: Service = AppState.shared.service) {
-        self.id = id
+    init(service: Service) {
         self.service = service
     }
 
-    func load() async throws -> ItemsViewData {
+    func load() async throws -> [ItemPreview] {
         try await service.fetchPreviews()
     }
+}
+
+extension ItemsViewModel: ReloadsWhenForegrounding {
+    var id: UUID { ScreenIDs.items }
+
+    var reloadTimerInterval: TimeInterval { 5 }
 }

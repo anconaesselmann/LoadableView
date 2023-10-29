@@ -12,7 +12,7 @@ public protocol ReloadsWhenForegrounding: ForegroundEnteringAware {
     func foregroundReload()
 }
 
-public extension ReloadsWhenForegrounding where Self: LoadableViewModel {
+public extension ReloadsWhenForegrounding where Self: LoadableBaseViewModel {
 
     var reloadTimerInterval: TimeInterval { 60 }
 

@@ -5,24 +5,16 @@ import SwiftUI
 import DebugSwiftUI
 import LoadableView
 
-@MainActor
-class LoadingManager: ObservableObject {
-    @Published
-    var isLoading: Bool = false
-}
-
 struct ItemsView: DefaultLoadableView {
-
-    var id: ItemsViewData.ID
 
     var _vm: StateObject<ItemsViewModel>
 
-    func loaded(_ item: ItemsViewData) -> some View {
+    func loaded(_ previews: [ItemPreview]) -> some View {
         VStack {
             DebugView(self)
             List {
-                ForEach(item.previews) { item in
-                    NavigationLink(item.text, value: item.id)
+                ForEach(previews) { preview in
+                    NavigationLink(preview.text, value: preview.id)
                 }
             }
             .navigationDestination(for: UUID.self) { id in
