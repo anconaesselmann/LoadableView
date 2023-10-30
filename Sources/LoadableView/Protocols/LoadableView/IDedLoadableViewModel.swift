@@ -58,6 +58,7 @@ public extension IDedLoadableViewModel {
                 return
             }
             setIsLoading(true)
+            self.id = id
             let item = try await load(id: id)
             if let reloadsWhenForegrounding = self as? (any ReloadsWhenForegrounding) {
                 reloadsWhenForegrounding.setLastLoaded()
