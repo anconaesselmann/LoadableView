@@ -4,7 +4,7 @@
 import SwiftUI
 
 @MainActor
-public protocol IDedLoadableView: LoadableBaseView
+public protocol IDedLoadableView: BaseLoadableView
     where
         ViewModel: IDedLoadableViewModel,
         ViewModel.Element == Element,
@@ -17,16 +17,9 @@ public protocol IDedLoadableView: LoadableBaseView
 
     // MARK: - Required implementation
     var id: ID { get set }
-
-    // MARK: - Initializers
-    init(id: ID, _vm: StateObject<ViewModel>)
 }
 
 public extension IDedLoadableView {
-    init(id: ID) {
-        let vm = ViewModel(id: id)
-        self.init(id: id, _vm: StateObject(wrappedValue: vm))
-    }
 
     @ViewBuilder
     var body: some View {
@@ -44,7 +37,11 @@ public extension IDedLoadableView {
                 errorView($0)
             }
         }.task {
-            await vm.initialLoad()
+            do {
+                try await vm.initialLoad(id: id)
+            } catch {
+                assertionFailure("\(error)")
+            }
         }
         .onAppear {
             vm.onAppear()

@@ -10,11 +10,11 @@ final internal class ReloadManager {
     private var lastLoaded: [AnyHashable: Date] = [:]
 
     internal func setLastLoaded(for item: any ReloadsWhenForegrounding) {
-        lastLoaded[AnyHashable(item.id)] = Date()
+        lastLoaded[AnyHashable(item.screenId)] = Date()
     }
 
     internal func durationSinceLastReload(for item: any ReloadsWhenForegrounding) -> TimeInterval {
-        let lastLoaded = lastLoaded[AnyHashable(item.id)] ?? .now
+        let lastLoaded = lastLoaded[AnyHashable(item.screenId)] ?? .now
         return abs(Date.now.timeIntervalSince(lastLoaded))
     }
 }

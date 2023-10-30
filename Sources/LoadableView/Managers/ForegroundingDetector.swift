@@ -11,11 +11,11 @@ final internal class ForegroundingDetector {
     private var observers: [AnyHashable: any ForegroundEnteringAware] = [:]
 
     internal func observe(_ observer: any ForegroundEnteringAware) {
-        observers[AnyHashable(observer.id)] = observer
+        observers[AnyHashable(observer.screenId)] = observer
     }
 
     internal func stopObserving(_ observer: any ForegroundEnteringAware) {
-        observers[AnyHashable(observer.id)] = nil
+        observers[AnyHashable(observer.screenId)] = nil
     }
 
     internal init() {
