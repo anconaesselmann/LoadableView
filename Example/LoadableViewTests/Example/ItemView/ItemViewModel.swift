@@ -6,42 +6,40 @@ import LoadableView
 
 final class ItemViewModel: IDedLoadableViewModel {
 
-    var id: Item.ID
+    var id: UUID?
 
     @Published
     var viewState: ViewState<Item> = .notLoaded
 
     var overlayState: OverlayState = .none
 
-    private let service: Service
+    private let service: ServiceProtocol
 
-    convenience init(id: Item.ID) {
-        self.init(id: id, service: AppState.shared.service)
+    convenience init() {
+        self.init(service: AppState.shared.service)
     }
 
-    init(id: Item.ID, service: Service) {
-        self.id = id
+    init(service: ServiceProtocol) {
         self.service = service
     }
 
-    func load() async throws -> Item {
+    func load(id: UUID) async throws -> Item {
         try await service.fetch(itemWithId: id)
     }
 
-    func cancel() async {
+    func cancel(id: UUID) async {
         await service.cancel(itemWithId: id)
     }
 
     func willEnterForeground() {
-        print("foregrounding", id.uuidString)
+        print("foregrounding", screenId.uuidString)
     }
 
     func didEnterBackground() {
-        print("backgrounding", id.uuidString)
+        print("backgrounding", screenId.uuidString)
     }
 }
 
 extension ItemViewModel: ReloadsWhenForegrounding {
-
     var reloadTimerInterval: TimeInterval { 5 }
 }

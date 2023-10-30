@@ -6,8 +6,14 @@ import LoremSwiftum
 import LoadableView
 import Combine
 
+protocol ServiceProtocol {
+    func fetchPreviews() async throws -> [ItemPreview]
+    func fetch(itemWithId id: Item.ID) async throws -> Item
+    func cancel(itemWithId id: Item.ID) async
+}
+
 @globalActor
-actor Service {
+actor Service: ServiceProtocol {
 
     enum ServiceError: Error {
         case randomError

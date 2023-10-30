@@ -8,7 +8,9 @@ import LoadableView
 struct ItemView: IDedDefaultLoadableView {
 
     var id: Item.ID
-    var _vm: StateObject<ItemViewModel>
+    
+    @StateObject
+    var vm = ItemViewModel()
 
     func loaded(_ item: Item) -> some View {
         VStack {
@@ -24,4 +26,9 @@ struct ItemView: IDedDefaultLoadableView {
             }
         }.frame(maxWidth: .infinity)
     }
+}
+
+#Preview {
+    @StateObject var vm = ItemViewModel(service: MockService())
+    return ItemView(id: MockService.item.id,vm: vm).frame(width: 150, height: 150)
 }

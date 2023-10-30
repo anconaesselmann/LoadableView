@@ -12,13 +12,13 @@ final class ItemsViewModel: LoadableViewModel {
 
     var overlayState: OverlayState = .none
 
-    private let service: Service
+    private let service: ServiceProtocol
 
     convenience init() {
         self.init(service: AppState.shared.service)
     }
 
-    init(service: Service) {
+    init(service: ServiceProtocol) {
         self.service = service
     }
 
@@ -28,7 +28,7 @@ final class ItemsViewModel: LoadableViewModel {
 }
 
 extension ItemsViewModel: ReloadsWhenForegrounding {
-    var id: UUID { ScreenIDs.items }
+    var screenId: UUID { ScreenIDs.items }
 
     var reloadTimerInterval: TimeInterval { 5 }
 }
