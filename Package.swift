@@ -7,7 +7,7 @@ let package = Package(
     name: "LoadableView",
     platforms: [
         .macOS(.v14),
-        .iOS(.v15)
+        .iOS(.v17)
     ],
     products: [
         .library(
