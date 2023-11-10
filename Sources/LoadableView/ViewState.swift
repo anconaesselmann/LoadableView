@@ -8,6 +8,16 @@ public enum ViewState<T> {
     case loaded(T)
 }
 
+public extension ViewState {
+    var loaded: T? {
+        switch self {
+        case .loaded(let loaded): return loaded
+        case .notLoaded: return nil
+        }
+    }
+}
+
+
 public enum Overlay {
     case none
     case loading

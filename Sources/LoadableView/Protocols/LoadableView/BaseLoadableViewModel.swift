@@ -59,4 +59,27 @@ public extension BaseLoadableViewModel {
             overlayState.send(.none)
         }
     }
+
+    func update(with item: Element) {
+        switch viewState {
+        case .notLoaded:
+            viewState = .loaded(item)
+        case .loaded(let oldItem):
+            if !equal(oldItem, item) {
+                viewState = .loaded(item)
+            }
+        }
+    }
+
+    func update<ArrayElement>(with item: ArrayElement) where Element == Array<ArrayElement> {
+        switch viewState {
+        case .notLoaded:
+            viewState = .loaded([item])
+        case .loaded(let oldItem):
+            let newItem = oldItem + [item]
+            if !equal(oldItem, item) {
+                viewState = .loaded(newItem)
+            }
+        }
+    }
 }
