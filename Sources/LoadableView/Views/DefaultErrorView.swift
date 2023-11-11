@@ -7,7 +7,13 @@ public struct DefaultErrorView: View {
 
     let error: Error
 
-    @State private var showingAlert = true
+    @State 
+    private var showingAlert = true
+
+    public init(error: Error, refresh: @escaping () -> Void) {
+        self.error = error
+        self.refresh = refresh
+    }
 
     var refresh: () -> Void
 
