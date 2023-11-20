@@ -20,7 +20,7 @@ public protocol BaseLoadableViewModel: ObservableObject, AnyObject {
     func setIsLoading(_ isLoading: Bool)
 
     // MARK: - Don't implement
-    func refresh()
+    func refresh(showLoading: Bool)
 
     // MARK: - Optional implementation
     func cancel() async
@@ -81,5 +81,9 @@ public extension BaseLoadableViewModel {
                 viewState = .loaded(newItem)
             }
         }
+    }
+
+    func refresh() {
+        self.refresh(showLoading: false)
     }
 }

@@ -33,8 +33,8 @@ public extension LoadableViewModel {
         setIsLoading(false)
     }
 
-    func refresh() async {
-        setIsLoading(true)
+    func refresh(showLoading: Bool) async {
+        setIsLoading(showLoading)
         do {
             let item = try await load()
             if let reloadsWhenForegrounding = self as? (any ReloadsWhenForegrounding) {
@@ -57,9 +57,9 @@ public extension LoadableViewModel {
         }
     }
 
-    func refresh() {
+    func refresh(showLoading: Bool) {
         Task { @MainActor in
-            await refresh()
+            await refresh(showLoading: showLoading)
         }
     }
 }

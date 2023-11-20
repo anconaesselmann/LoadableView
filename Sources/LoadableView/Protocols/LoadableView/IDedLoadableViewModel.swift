@@ -73,8 +73,8 @@ public extension IDedLoadableViewModel {
         setIsLoading(false)
     }
 
-    func refresh() async throws {
-        setIsLoading(true)
+    func refresh(showLoading: Bool) async throws {
+        setIsLoading(showLoading)
         do {
             guard let id = self.id else {
                 throw LoadableViewError.noId
@@ -100,10 +100,10 @@ public extension IDedLoadableViewModel {
         }
     }
 
-    func refresh() {
+    func refresh(showLoading: Bool) {
         Task { @MainActor in
             do {
-                try await refresh()
+                try await refresh(showLoading: showLoading)
             } catch {
                 assertionFailure("\(error)")
             }
