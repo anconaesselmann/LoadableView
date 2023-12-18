@@ -55,8 +55,8 @@ public extension IDedLoadableView {
         .refreshable {
             vm.refresh()
         }
-        .onChange(of: id) { _, newValue in
-            vm.idHasChanged(newValue)
+        .onChange(of: id) { oldValue, newValue in
+            vm.idHasChanged(newValue, showLoading: true)
         }
     }
 }

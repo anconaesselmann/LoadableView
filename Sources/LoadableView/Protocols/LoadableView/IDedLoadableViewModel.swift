@@ -34,22 +34,25 @@ public extension IDedLoadableViewModel {
         await cancel(id: id)
     }
 
+    @MainActor
     func idHasChanged(
         _ newId: ID,
-        showNotLoadedState: Bool = true
+        showLoading: Bool = false,
+        showNotLoadedState: Bool = false
     ) {
-        setIsLoading(false)
+        guard id != newId else {
+            return
+        }
+        id = newId
+        setIsLoading(showLoading)
         setError(nil)
         Task {
             await cancel()
-            await MainActor.run {
-                if showNotLoadedState {
-                    viewState = .notLoaded
-                }
-                id = newId
-                refresh()
-            }
         }
+        if showNotLoadedState {
+            viewState = .notLoaded
+        }
+        refresh(showLoading: showLoading)
     }
 
     func initialLoad(id: ID) async throws {
