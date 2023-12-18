@@ -24,6 +24,8 @@ public protocol BaseLoadableViewModel: ObservableObject, AnyObject {
 
     // MARK: - Optional implementation
     func cancel() async
+
+    func onLoadingChange(isLoading: Bool)
 }
 
 public extension BaseLoadableViewModel {
@@ -53,6 +55,7 @@ public extension BaseLoadableViewModel {
     }
 
     func setIsLoading(_ isLoading: Bool) {
+        onLoadingChange(isLoading: isLoading)
         if isLoading {
             overlayState.send(.loading)
         } else {
@@ -90,5 +93,9 @@ public extension BaseLoadableViewModel {
     @MainActor
     func setLoaded(_ newValue: Element) {
         viewState = .loaded(newValue)
+    }
+
+    func onLoadingChange(isLoading: Bool) {
+
     }
 }
