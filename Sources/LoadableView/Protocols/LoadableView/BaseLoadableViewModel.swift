@@ -47,7 +47,7 @@ public extension BaseLoadableViewModel {
     }
 
     func setError(_ error: Error?) {
-        if let error = error {
+        if let error = error, !error.isCancellation {
             overlayState.send(.error(error))
         } else {
             overlayState.send(.none)

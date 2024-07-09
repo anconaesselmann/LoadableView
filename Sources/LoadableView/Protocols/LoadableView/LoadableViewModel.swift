@@ -25,10 +25,11 @@ public extension LoadableViewModel {
             }
             viewState = .loaded(item)
         }
-        catch is CancellationError {}
         catch {
-            setError(error)
-            return
+            if !error.isCancellation {
+                setError(error)
+                return
+            }
         }
         setIsLoading(false)
     }
@@ -50,10 +51,8 @@ public extension LoadableViewModel {
             }
             setIsLoading(false)
         }
-        catch is CancellationError {}
         catch {
             setError(error)
-            return
         }
     }
 
