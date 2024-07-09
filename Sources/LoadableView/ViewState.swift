@@ -15,8 +15,11 @@ public extension ViewState {
         case .notLoaded: return nil
         }
     }
-}
 
+    var hasLoaded: Bool {
+        loaded != nil
+    }
+}
 
 public enum Overlay {
     case none
