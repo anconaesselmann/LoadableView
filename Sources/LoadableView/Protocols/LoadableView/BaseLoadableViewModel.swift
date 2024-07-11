@@ -90,6 +90,11 @@ public extension BaseLoadableViewModel {
         self.refresh(showLoading: false)
     }
 
+    func refresh(with item: Element) {
+        update(with: item)
+        refresh()
+    }
+
     @MainActor
     func setLoaded(_ newValue: Element) {
         viewState = .loaded(newValue)
