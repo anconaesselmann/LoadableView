@@ -16,7 +16,7 @@ public protocol IDedLoadableView: BaseLoadableView
             ID: Equatable
 
     // MARK: - Required implementation
-    var id: ID { get set }
+    var id: ID { get }
 }
 
 public extension IDedLoadableView {
