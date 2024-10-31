@@ -21,6 +21,7 @@ public protocol BaseLoadableViewModel: ObservableObject, AnyObject {
 
     // MARK: - Don't implement
     func refresh(showLoading: Bool)
+    func refresh(on changePublisher: AnyPublisher<Void, Never>, showLoading: Bool) -> AnyCancellable
 
     // MARK: - Optional implementation
     func cancel() async
@@ -84,15 +85,6 @@ public extension BaseLoadableViewModel {
                 viewState = .loaded(newItem)
             }
         }
-    }
-
-    func refresh() {
-        self.refresh(showLoading: false)
-    }
-
-    func refresh(with item: Element) {
-        update(with: item)
-        refresh()
     }
 
     @MainActor
