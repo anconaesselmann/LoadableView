@@ -27,6 +27,10 @@ public protocol BaseLoadableViewModel: ObservableObject, AnyObject {
     func cancel() async
 
     func onLoadingChange(isLoading: Bool)
+
+    func shouldRefresh(_ oldItem: Element?, newItem: Element) async -> Bool
+    
+    func shouldAnimate(_ oldItem: Element?, newItem: Element) async -> Bool
 }
 
 public extension BaseLoadableViewModel {

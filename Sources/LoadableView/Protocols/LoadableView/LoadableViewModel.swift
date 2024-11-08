@@ -2,6 +2,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 @MainActor
 public protocol LoadableViewModel: BaseLoadableViewModel {
@@ -38,6 +39,9 @@ public extension LoadableViewModel {
         setIsLoading(showLoading)
         do {
             let item = try await load()
+            guard await shouldRefresh(viewState.loaded, newItem: item) else {
+                return
+            }
             if let reloadsWhenForegrounding = self as? (any ReloadsWhenForegrounding) {
                 reloadsWhenForegrounding.setLastLoaded()
             }
@@ -46,7 +50,10 @@ public extension LoadableViewModel {
                 viewState = .loaded(item)
             case .loaded(let oldItem):
                 if !equal(oldItem, item) {
-                    viewState = .loaded(item)
+                    let shouldAnimate = await self.shouldAnimate(viewState.loaded, newItem: item)
+                    withAnimation(shouldAnimate: shouldAnimate) {
+                        viewState = .loaded(item)
+                    }
                 }
             }
             setIsLoading(false)
@@ -60,5 +67,13 @@ public extension LoadableViewModel {
         Task { @MainActor in
             await refresh(showLoading: showLoading)
         }
+    }
+
+    func shouldRefresh(_ oldItem: Element?, newItem: Element) async -> Bool {
+        return true
+    }
+
+    func shouldAnimate(_ oldItem: Element?, newItem: Element) async -> Bool {
+        return true
     }
 }
