@@ -34,7 +34,6 @@ public protocol BaseLoadableViewModel: ObservableObject, AnyObject {
 }
 
 public extension BaseLoadableViewModel {
-
     func onAppear() {
         if let foregroundEnteringAware = self as? (any ForegroundEnteringAware) {
             ForegroundingDetector.shared.observe(foregroundEnteringAware)

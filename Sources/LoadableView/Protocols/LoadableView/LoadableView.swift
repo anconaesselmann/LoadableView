@@ -12,39 +12,19 @@ public protocol LoadableView: BaseLoadableView
 }
 
 public extension LoadableView {
+    func initialLoadAction() async {
+        await vm.initialLoad()
+    }
+}
+
+public extension LoadableView {
+
     func cancel() async {
         // Implement to cancel loading
     }
-    
+
     @ViewBuilder
     var body: some View {
-        ZStack {
-            switch vm.viewState {
-            case .notLoaded:
-                notLoaded()
-            case .loaded(let element):
-                loaded(element)
-            }
-            InternalLoadingView(vm.overlayState) {
-                loading()
-            }
-            InternalErrorView(vm.overlayState) {
-                errorView($0)
-            }
-        }.task {
-            await vm.initialLoad()
-        }
-        .onAppear {
-            vm.onAppear()
-            onAppear()
-        }
-        .onDisappear {
-            vm.onDisappear()
-            onDisappear()
-
-        }
-        .refreshable {
-            vm.refresh()
-        }
+        _buildBody()
     }
 }

@@ -20,43 +20,21 @@ public protocol IDedLoadableView: BaseLoadableView
 }
 
 public extension IDedLoadableView {
+    func initialLoadAction() async {
+        do {
+            try await vm.initialLoad(id: id)
+        } catch {
+            assertionFailure("\(error)")
+        }
+    }
+}
 
+public extension IDedLoadableView {
     @ViewBuilder
     var body: some View {
-        ZStack {
-            switch vm.viewState {
-            case .notLoaded:
-                notLoaded()
-            case .loaded(let element):
-                loaded(element)
+        _buildBody()
+            .onChange(of: id) { oldValue, newValue in
+                vm.idHasChanged(newValue, showLoading: true)
             }
-            InternalLoadingView(vm.overlayState) {
-                loading()
-            }
-            InternalErrorView(vm.overlayState) {
-                errorView($0)
-            }
-        }.task {
-            do {
-                try await vm.initialLoad(id: id)
-            } catch {
-                assertionFailure("\(error)")
-            }
-        }
-        .onAppear {
-            vm.onAppear()
-            onAppear()
-        }
-        .onDisappear {
-            vm.onDisappear()
-            onDisappear()
-
-        }
-        .refreshable {
-            vm.refresh()
-        }
-        .onChange(of: id) { oldValue, newValue in
-            vm.idHasChanged(newValue, showLoading: true)
-        }
     }
 }

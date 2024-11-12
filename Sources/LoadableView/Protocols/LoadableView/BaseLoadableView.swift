@@ -36,10 +36,49 @@ public protocol BaseLoadableView: View {
     // MARK: Optional
     func onAppear()
     func onDisappear()
+
+    // Note:
+    //    Has default implementation. Must call respective initialLoad method
+    //    on view model in custom implementation
+    func initialLoadAction() async
 }
 
 public extension BaseLoadableView {
     func onAppear() { }
 
     func onDisappear() { }
+}
+
+internal extension BaseLoadableView {
+    @ViewBuilder
+    func _buildBody() -> some View {
+        ZStack {
+            switch vm.viewState {
+            case .notLoaded:
+                notLoaded()
+            case .loaded(let element):
+                loaded(element)
+            }
+            InternalLoadingView(vm.overlayState) {
+                loading()
+            }
+            InternalErrorView(vm.overlayState) {
+                errorView($0)
+            }
+        }.task {
+            await initialLoadAction()
+        }
+        .onAppear {
+            vm.onAppear()
+            onAppear()
+        }
+        .onDisappear {
+            vm.onDisappear()
+            onDisappear()
+
+        }
+        .refreshable {
+            vm.refresh()
+        }
+    }
 }
