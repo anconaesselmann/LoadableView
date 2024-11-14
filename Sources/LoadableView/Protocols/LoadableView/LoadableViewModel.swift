@@ -76,4 +76,8 @@ public extension LoadableViewModel {
     func shouldAnimate(_ oldItem: Element?, newItem: Element) async -> Bool {
         return true
     }
+
+    func _refresh(ifID id: UUID, showLoading: Bool) {
+        self.refresh(showLoading: showLoading)
+    }
 }

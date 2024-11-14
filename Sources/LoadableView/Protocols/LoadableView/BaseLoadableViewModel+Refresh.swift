@@ -15,21 +15,26 @@ public extension BaseLoadableViewModel {
         refresh()
     }
 
-    func refresh(on changePublisher: AnyPublisher<Void, Never>, showLoading: Bool) -> AnyCancellable {
-        changePublisher.sink { [weak self] in
-            self?.refresh(showLoading: showLoading)
+    func refresh(on changePublisher: AnyPublisher<ObservationType, Never>, showLoading: Bool) -> AnyCancellable {
+        changePublisher.sink { [weak self] observationType in
+            switch observationType {
+            case .void:
+                self?.refresh(showLoading: showLoading)
+            case .id(let id):
+                self?._refresh(ifID: id, showLoading: showLoading)
+            }
         }
     }
 
-    func refresh(on changePublisher: AnyPublisher<Void, Never>) -> AnyCancellable {
+    func refresh(on changePublisher: AnyPublisher<ObservationType, Never>) -> AnyCancellable {
         refresh(on: changePublisher, showLoading: false)
     }
 
-    func refresh(on changePublishers: [AnyPublisher<Void, Never>], showLoading: Bool = false) -> AnyCancellable {
+    func refresh(on changePublishers: [AnyPublisher<ObservationType, Never>], showLoading: Bool = false) -> AnyCancellable {
         refresh(on: Publishers.MergeMany(changePublishers).eraseToAnyPublisher(), showLoading: showLoading)
     }
 
-    func refresh(on changePublisher: AnyPublisher<Void, Never>..., showLoading: Bool = false) -> AnyCancellable {
+    func refresh(on changePublisher: AnyPublisher<ObservationType, Never>..., showLoading: Bool = false) -> AnyCancellable {
         refresh(on: changePublisher, showLoading: showLoading)
     }
 

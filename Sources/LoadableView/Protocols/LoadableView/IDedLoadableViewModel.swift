@@ -125,4 +125,11 @@ public extension IDedLoadableViewModel {
     func shouldAnimate(_ oldItem: Element?, newItem: Element) async -> Bool {
         return true
     }
+
+    func _refresh(ifID id: UUID, showLoading: Bool) {
+        guard self.id == id as? Self.ID else {
+            return
+        }
+        self.refresh(showLoading: showLoading)
+    }
 }

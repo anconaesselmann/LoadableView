@@ -13,24 +13,26 @@ public protocol BaseLoadableViewModel: ObservableObject, AnyObject {
     var viewState: ViewState<Element> { get set }
     var overlayState: CurrentValueSubject<Overlay, Never> { get }
 
-    // MARK: - Don't implement
-    func onAppear()
-    func onDisappear()
-    func setError(_ error: Error?)
-    func setIsLoading(_ isLoading: Bool)
-
-    // MARK: - Don't implement
-    func refresh(showLoading: Bool)
-    func refresh(on changePublisher: AnyPublisher<Void, Never>, showLoading: Bool) -> AnyCancellable
-
     // MARK: - Optional implementation
     func cancel() async
 
     func onLoadingChange(isLoading: Bool)
 
     func shouldRefresh(_ oldItem: Element?, newItem: Element) async -> Bool
-    
+
     func shouldAnimate(_ oldItem: Element?, newItem: Element) async -> Bool
+
+    // MARK: - Don't implement
+    func onAppear()
+    func onDisappear()
+    func setError(_ error: Error?)
+    func setIsLoading(_ isLoading: Bool)
+
+    func refresh(showLoading: Bool)
+    func refresh(on changePublisher: AnyPublisher<ObservationType, Never>, showLoading: Bool) -> AnyCancellable
+
+    // Note: - Used internally for observing LoadableViewObservables
+    func _refresh(ifID id: UUID, showLoading: Bool)
 }
 
 public extension BaseLoadableViewModel {
