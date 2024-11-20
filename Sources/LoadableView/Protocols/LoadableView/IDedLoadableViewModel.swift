@@ -18,12 +18,18 @@ public protocol IDedLoadableViewModel: BaseLoadableViewModel {
 
     // MARK: - Optional implementation
     func cancel(id: ID) async
+
+    var cache: (any ViewDataCache<ID, Element>)? { get }
 }
 
 public extension IDedLoadableViewModel {
 
     func cancel(id: ID) async {
         // Implement to cancel loading
+    }
+
+    var cache: (any ViewDataCache<ID, Element>)? {
+        return nil
     }
 
     func cancel() async {
@@ -60,9 +66,14 @@ public extension IDedLoadableViewModel {
             guard case .notLoaded = viewState else {
                 return
             }
-            setIsLoading(true)
+            if let cache, let cached = cache.value(forKey: id) {
+                viewState = .loaded(cached)
+            } else {
+                setIsLoading(true)
+            }
             self.id = id
             let item = try await load(id: id)
+            cache?.insert(item, forKey: id)
             if let reloadsWhenForegrounding = self as? (any ReloadsWhenForegrounding) {
                 reloadsWhenForegrounding.setLastLoaded()
             }
