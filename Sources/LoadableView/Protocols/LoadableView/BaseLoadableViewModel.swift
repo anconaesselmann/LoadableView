@@ -33,6 +33,8 @@ public protocol BaseLoadableViewModel: ObservableObject, AnyObject {
 
     // Note: - Used internally for observing LoadableViewObservables
     func _refresh(ifID id: UUID, showLoading: Bool)
+
+    func _cached(_ id: Any?) -> Element?
 }
 
 public extension BaseLoadableViewModel {

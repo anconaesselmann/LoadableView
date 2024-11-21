@@ -13,7 +13,11 @@ public extension LoadableViewModel {
     func cancel() async {
         // Implement to cancel loading
     }
-    
+
+    func _cached(_ id: Any?) -> Element? {
+        return nil
+    }
+
     func initialLoad() async {
         do {
             guard case .notLoaded = viewState else {

@@ -32,7 +32,7 @@ public extension IDedLoadableView {
 public extension IDedLoadableView {
     @ViewBuilder
     var body: some View {
-        _buildBody()
+        _buildBody(id)
             .onChange(of: id) { oldValue, newValue in
                 vm.idHasChanged(newValue, showLoading: true)
             }

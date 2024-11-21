@@ -61,6 +61,17 @@ public extension IDedLoadableViewModel {
         refresh(showLoading: showLoading)
     }
 
+    func _cached(_ id: Any?) -> Element? {
+        guard let id = self.id ?? id as? ID else {
+            return nil
+        }
+        if let cache, let cached = cache.value(forKey: id) {
+            return cached
+        } else {
+            return nil
+        }
+    }
+
     func initialLoad(id: ID) async throws {
         do {
             guard case .notLoaded = viewState else {
@@ -95,6 +106,7 @@ public extension IDedLoadableViewModel {
                 throw LoadableViewError.noId
             }
             let item = try await load(id: id)
+            cache?.insert(item, forKey: id)
             guard await shouldRefresh(viewState.loaded, newItem: item) else {
                 return
             }

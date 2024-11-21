@@ -51,13 +51,17 @@ public extension BaseLoadableView {
 
 internal extension BaseLoadableView {
     @ViewBuilder
-    func _buildBody() -> some View {
+    func _buildBody(_ id: Any? = nil) -> some View {
         ZStack {
-            switch vm.viewState {
-            case .notLoaded:
-                notLoaded()
-            case .loaded(let element):
-                loaded(element)
+            if !vm.viewState.hasLoaded, let cached = vm._cached(id) {
+                loaded(cached)
+            } else {
+                switch vm.viewState {
+                case .notLoaded:
+                    notLoaded()
+                case .loaded(let element):
+                    loaded(element)
+                }
             }
             InternalLoadingView(vm.overlayState) {
                 loading()
