@@ -100,11 +100,17 @@ public extension IDedLoadableViewModel {
     }
 
     func refresh(showLoading: Bool) async throws {
-        setIsLoading(showLoading)
         do {
             guard let id = self.id else {
                 throw LoadableViewError.noId
             }
+            let combinedShowLoading: Bool
+            if let cache, cache.hasValue(forKey: id) {
+                combinedShowLoading = showLoadingStateWhenCached()
+            } else {
+                combinedShowLoading = showLoading
+            }
+            setIsLoading(combinedShowLoading)
             let item = try await load(id: id)
             cache?.insert(item, forKey: id)
             guard await shouldRefresh(viewState.loaded, newItem: item) else {

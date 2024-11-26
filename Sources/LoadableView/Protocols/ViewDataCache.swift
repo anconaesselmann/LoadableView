@@ -10,4 +10,5 @@ public protocol ViewDataCache<Key, Value> {
 
     func insert(_ value: Value, forKey key: Key)
     func value(forKey key: Key) -> Value?
+    func hasValue(forKey key: Key) -> Bool
 }

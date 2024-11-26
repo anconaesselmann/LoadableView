@@ -22,6 +22,8 @@ public protocol BaseLoadableViewModel: ObservableObject, AnyObject {
 
     func shouldAnimate(_ oldItem: Element?, newItem: Element) async -> Bool
 
+    func showLoadingStateWhenCached() -> Bool
+
     // MARK: - Don't implement
     func onAppear()
     func onDisappear()
@@ -101,5 +103,9 @@ public extension BaseLoadableViewModel {
 
     func onLoadingChange(isLoading: Bool) {
 
+    }
+
+    func showLoadingStateWhenCached() -> Bool {
+        return true
     }
 }
