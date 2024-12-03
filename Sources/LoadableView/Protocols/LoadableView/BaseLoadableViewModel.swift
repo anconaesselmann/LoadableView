@@ -29,6 +29,7 @@ public protocol BaseLoadableViewModel: ObservableObject, AnyObject {
     func onDisappear()
     func setError(_ error: Error?)
     func setIsLoading(_ isLoading: Bool)
+    func invalidate()
 
     func refresh(showLoading: Bool)
     func refresh(on changePublisher: AnyPublisher<ObservationType, Never>, showLoading: Bool) -> AnyCancellable
