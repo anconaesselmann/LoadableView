@@ -59,6 +59,8 @@ public extension LoadableViewModel {
                         viewState = .loaded(item)
                     }
                 }
+            case .invalidated:
+                return
             }
             setIsLoading(false)
         }
@@ -79,6 +81,10 @@ public extension LoadableViewModel {
 
     func shouldAnimate(_ oldItem: Element?, newItem: Element) async -> Bool {
         return true
+    }
+
+    func invalidate() {
+        viewState = .invalidated
     }
 
     func _refresh(ifID id: UUID, showLoading: Bool) {

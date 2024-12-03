@@ -57,6 +57,8 @@ internal extension BaseLoadableView {
                 loaded(cached)
             } else {
                 switch vm.viewState {
+                case .invalidated:
+                    EmptyView()
                 case .notLoaded:
                     notLoaded()
                 case .loaded(let element):

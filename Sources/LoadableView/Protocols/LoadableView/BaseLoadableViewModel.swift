@@ -81,6 +81,8 @@ public extension BaseLoadableViewModel {
             if !equal(oldItem, item) {
                 viewState = .loaded(item)
             }
+        case .invalidated:
+            viewState = .loaded(item)
         }
     }
 
@@ -93,6 +95,7 @@ public extension BaseLoadableViewModel {
             if !equal(oldItem, item) {
                 viewState = .loaded(newItem)
             }
+        case .invalidated: ()
         }
     }
 

@@ -4,6 +4,7 @@
 import Foundation
 
 public enum ViewState<T> {
+    case invalidated
     case notLoaded
     case loaded(T)
 }
@@ -12,12 +13,19 @@ public extension ViewState {
     var loaded: T? {
         switch self {
         case .loaded(let loaded): return loaded
-        case .notLoaded: return nil
+        case .notLoaded, .invalidated: return nil
         }
     }
 
     var hasLoaded: Bool {
         loaded != nil
+    }
+
+    var isInvalid: Bool {
+        switch self {
+        case .invalidated: return true
+        case .loaded, .notLoaded: return false
+        }
     }
 }
 
