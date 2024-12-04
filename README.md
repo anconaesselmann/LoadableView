@@ -1,6 +1,6 @@
 # LoadableView
 
-LoadableViews reduces boilerplate when creating SwiftUI views that have loading/loaded/error states.
+`LoadableView` reduces boilerplate when creating SwiftUI views that have loading/loaded/error states.
 
 ## Author
 
