@@ -12,6 +12,8 @@ LoadableView is available under the MIT license. See the LICENSE file for more i
 
 ## Usage
 
+`LoadableView` is great for fetching lists of things:
+
 ```swift
 import SwiftUI
 import LoadableView
@@ -24,9 +26,11 @@ struct BooksView: DefaultLoadableView {
     @StateObject
     var vm = BooksViewModel()
 
-    func loaded(_ viewData: [Book]) -> some View {
-        VStack {
-
+    func loaded(_ books: [Book]) -> some View {
+        List {
+            ForEach(books) { book in
+                Text(book.name)
+            }
         }
     }
 }
@@ -43,6 +47,44 @@ final class BooksViewModel: LoadableViewModel {
 
     func load() async throws -> [Book] {
         try await service.fetchAll()
+    }
+}
+```
+
+Resources that have an ID use `IDedLoadableView`:
+
+```swift
+import SwiftUI
+import LoadableView
+
+struct BookView: IDedDefaultLoadableView {
+
+    var id: UUID
+
+    @StateObject
+    var vm = BookViewModel()
+
+    func loaded(_ book: Book) -> some View {
+        VStack {
+            Text(book.name)
+        }
+    }
+}
+
+@MainActor
+final class BookViewModel: IDedLoadableViewModel {
+
+    var id: UUID?
+
+    @Published
+    var viewState: ViewState<Book> = .notLoaded
+
+    var overlayState: OverlayState = .none
+
+    private let service = BookService()
+
+    func load(id: UUID) async throws -> Book {
+        try await service.fetchBook(withId: id)
     }
 }
 ```
