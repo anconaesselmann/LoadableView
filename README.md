@@ -12,6 +12,9 @@ LoadableView is available under the MIT license. See the LICENSE file for more i
 
 ## Usage
 
+For a none-trivial example app take a look at the example app [Books](https://github.com/anconaesselmann/Books), which demostrates the usage of LoadableView using the [OpenLibrary API](https://openlibrary.org/dev/docs/restful_api)
+
+
 `LoadableView` is great for fetching lists of things:
 
 ```swift
@@ -88,5 +91,3 @@ final class BookViewModel: IDedLoadableViewModel {
     }
 }
 ```
-
-For a none-trivial example app take a look at the example app [Books](https://github.com/anconaesselmann/Books), which demostrates the usage of LoadableView using the [OpenLibrary API](https://openlibrary.org/dev/docs/restful_api)
