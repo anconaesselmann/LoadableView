@@ -11,7 +11,9 @@ public enum ObservationType {
 public protocol LoadableViewObservable {
     associatedtype Change
         where Change: Hashable
-    nonisolated func publisher(for observableChange: Set<Change>) -> AnyPublisher<ObservationType, Never>
+
+    @MainActor
+    func publisher(for observableChange: Set<Change>) -> AnyPublisher<ObservationType, Never>
 }
 
 public extension Publisher where Output == Void, Failure == Never {
